@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: io.openmessaging:openmessaging-api:0.1.0-alpha">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/io/openmessaging/openmessaging-api/0.1.0-alpha/openmessaging-api-0.1.0-alpha.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/io/openmessaging/openmessaging-api/0.1.0-alpha/openmessaging-api-0.1.0-alpha-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/io/openmessaging/openmessaging-api/0.1.0-alpha/openmessaging-api-0.1.0-alpha-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
