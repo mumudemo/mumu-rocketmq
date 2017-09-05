@@ -57,7 +57,7 @@ public class RocketMQOrderProcedure {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    orderProcedure.sendOrderMessage("lovecws"+j,j);
+                    orderProcedure.sendOrderMessage("lovecws"+j,1);
                 }
             }).start();
         }
