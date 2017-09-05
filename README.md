@@ -13,4 +13,5 @@
 
 ## 参考资料
 [Apache-rocketmq官方文档](https://rocketmq.incubator.apache.org)  
-[分布式开放消息系统(RocketMQ)的原理与实践](http://www.jianshu.com/p/453c6e7ff81c)    
+[分布式开放消息系统(RocketMQ)的原理与实践](http://www.jianshu.com/p/453c6e7ff81c)
+[芋道源码--rocketmq纯源码解析](http://www.yunai.me/categories/RocketMQ/?jianshu)
