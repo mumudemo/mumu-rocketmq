@@ -6,7 +6,7 @@ public class RocketMQConfiguration {
 
     public static final String ROCKETMQ_TOPIC="TopicTest";
 
-    public static final String ROCKETMQ_GROUP="rocketmq";
+    public static final String ROCKETMQ_GROUP="babymm";
 
     public static final String ROCKETMQ_PORT="10909,10911,10912";
 }

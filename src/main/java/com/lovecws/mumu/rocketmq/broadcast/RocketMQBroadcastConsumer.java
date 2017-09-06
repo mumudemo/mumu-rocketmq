@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * 接受广播消息
+ * 当消费者设置为广播消息的时候 当有多个消费者订阅同一个主题的tag的话，多个消费者都会接收到消息。
  */
 public class RocketMQBroadcastConsumer {
 
