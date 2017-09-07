@@ -1,6 +1,7 @@
 package com.lovecws.mumu.rocketmq.quickstart;
 
 import com.lovecws.mumu.rocketmq.config.RocketMQConfiguration;
+import org.apache.rocketmq.client.consumer.AllocateMessageQueueStrategy;
 import org.apache.rocketmq.client.consumer.DefaultMQPullConsumer;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.MessageQueueListener;
@@ -38,11 +39,24 @@ public class RocketMQConsumer {
             //程序第一次启动从消息队列头取数据
             consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
             //随机获取队列中的消息，相应的是MessageListenerOrderly 按照消息发送顺序来接受消息
+            consumer.setMessageModel(MessageModel.CLUSTERING);
+            //一次批量接受10条消息，并且对这些消息进行消费
+            consumer.setConsumeMessageBatchMaxSize(10);
+            consumer.setAllocateMessageQueueStrategy(new AllocateMessageQueueStrategy() {
+                @Override
+                public List<MessageQueue> allocate(String s, String s1, List<MessageQueue> list, List<String> list1) {
+                    return null;
+                }
+
+                @Override
+                public String getName() {
+                    return null;
+                }
+            });
             consumer.registerMessageListener(
                     new MessageListenerConcurrently() {
                         public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> list, ConsumeConcurrentlyContext Context) {
-                            Message msg = list.get(0);
-                            System.out.println(msg.toString());
+                            System.out.println(list.size()+"  "+list);
                             return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
                         }
                     }
@@ -61,6 +75,7 @@ public class RocketMQConsumer {
         DefaultMQPullConsumer consumer=new DefaultMQPullConsumer(RocketMQConfiguration.ROCKETMQ_GROUP);
         consumer.setNamesrvAddr(RocketMQConfiguration.ROCKETMQ_NAMESRV);
         try {
+            consumer.start();
             Set<MessageQueue> messageQueues = consumer.fetchSubscribeMessageQueues(RocketMQConfiguration.ROCKETMQ_TOPIC);
             System.out.println(messageQueues);
             consumer.registerMessageQueueListener(RocketMQConfiguration.ROCKETMQ_TOPIC, new MessageQueueListener() {
@@ -69,7 +84,6 @@ public class RocketMQConsumer {
                     System.out.println(s+" "+set+"  "+set1);
                 }
             });
-            consumer.start();
         } catch (MQClientException e) {
             e.printStackTrace();
         }

@@ -22,7 +22,7 @@ public class RocketMQProcedure {
         producer.setVipChannelEnabled(false);
         try {
             producer.start();
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 100; i++) {
                 SendResult sendResult = producer.send(new Message(RocketMQConfiguration.ROCKETMQ_TOPIC, message!=null?message.getBytes():null));
                 System.out.println(sendResult);
             }
