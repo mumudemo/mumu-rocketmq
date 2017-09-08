@@ -59,6 +59,27 @@ sh mqadmin updateTopic  -c DefaultCluster -n 192.168.11.25:9876 -t babymm
 -r 读队列（默认8个）
 ```
 
+## rocketmq 个人测试
+由于环境有限rocketmq运行环境为
+```
+jdk: oracleJDK1.8
+jvm: xms:512m xmx:512m
+os : docker centos 7
+其中namesrv、broker各一台 配置同上
+```
+运行结果  
+`单线程同步发送10字节，测试时间60s`  
+**800 TPS**  
+
+`10线程同步发送10字节，测试时间60s`  
+**7800 TPS**
+ 
+`20线程同步发送10字节，测试时间60s`  
+**11000 TPS**  
+
+遇到的问题    
+当线程增加到20的时候，发送消息的时候就开始报错了，说是发送消息超时，查看服务器的报错日志，也没有找到具体的原因。个人估计是namesrv分配的内存太小，无法处理太高的并发量。说起来也真是惭愧啊！没有好的测试服务器很影响功能测试，但是从测试结果来看，rocketmq还是一个很了不起的消息中间件。
+
 ## 参考资料
 [Apache-rocketmq官方文档](https://rocketmq.incubator.apache.org)  
 [分布式开放消息系统(RocketMQ)的原理与实践](http://www.jianshu.com/p/453c6e7ff81c)  
