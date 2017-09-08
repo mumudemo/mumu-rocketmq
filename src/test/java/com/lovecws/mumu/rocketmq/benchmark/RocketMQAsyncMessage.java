@@ -19,7 +19,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 /**
  * 使用jmh测试工具 测试rocketmq发送消息的并发量
  */
-public class RocketMQProcedureJMH {
+public class RocketMQAsyncMessage {
 
     private static DefaultMQProducer producer=new DefaultMQProducer(RocketMQConfiguration.ROCKETMQ_GROUP);
     private static byte[] message=new byte[10];
@@ -35,7 +35,7 @@ public class RocketMQProcedureJMH {
     }
 
     /**
-     * 发送同步消息
+     * 发送异步消息
      * @throws InterruptedException
      * @throws RemotingException
      * @throws MQClientException
@@ -43,24 +43,6 @@ public class RocketMQProcedureJMH {
      */
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
-    public void sendMessage(){
-        try {
-            SendResult sendResult = producer.send(new Message(RocketMQConfiguration.ROCKETMQ_TOPIC, message));
-        } catch (Exception e) {
-            //e.printStackTrace();
-        }
-        //System.out.println(sendResult);
-    }
-
-    /**
-     * 发送异步消息
-     * @throws InterruptedException
-     * @throws RemotingException
-     * @throws MQClientException
-     * @throws MQBrokerException
-     */
-    /*@Benchmark
-    @BenchmarkMode(Mode.Throughput)*/
     public void sendAsyncMessage() throws InterruptedException, RemotingException, MQClientException, MQBrokerException {
         producer.send(new Message(RocketMQConfiguration.ROCKETMQ_TOPIC,message), new SendCallback() {
             @Override
@@ -77,7 +59,7 @@ public class RocketMQProcedureJMH {
 
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
-                .include(RocketMQProcedureJMH.class.getSimpleName())
+                .include(RocketMQAsyncMessage.class.getSimpleName())
                 .warmupIterations(60)
                 .measurementIterations(60)
                 .forks(1)

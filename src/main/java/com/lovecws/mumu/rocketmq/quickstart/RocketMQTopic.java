@@ -1,12 +1,10 @@
 package com.lovecws.mumu.rocketmq.quickstart;
 
-import org.apache.rocketmq.client.MQAdmin;
-import org.apache.rocketmq.client.impl.MQAdminImpl;
-import org.apache.rocketmq.client.impl.factory.MQClientInstance;
-import org.apache.rocketmq.tools.command.broker.UpdateBrokerConfigSubCommand;
+import org.apache.rocketmq.tools.command.topic.UpdateTopicSubCommand;
 
 public class RocketMQTopic {
     public static void main(String[] args) {
-        UpdateBrokerConfigSubCommand command=new UpdateBrokerConfigSubCommand();
+        UpdateTopicSubCommand topicSubCommand=new UpdateTopicSubCommand();
+
     }
 }

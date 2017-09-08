@@ -1,5 +1,7 @@
 # mumu-rocketmq分布式消息系统
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/babymm/mumu-rocketmq/blob/master/LICENSE) [![Maven Central](https://img.shields.io/maven-central/v/com.weibo/motan.svg?label=Maven%20Central)](https://mvnrepository.com/search?q=motan) [![Build Status](https://travis-ci.org/babymm/mumu-rocketmq.svg?branch=master)](https://travis-ci.org/babymm/mumu-rocketmq) [![OpenTracing-1.0 Badge](https://img.shields.io/badge/OpenTracing--1.0-enabled-blue.svg)](http://opentracing.io)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/babymm/mumu-rocketmq/blob/master/LICENSE) [![Maven Central](https://img.shields.io/maven-central/v/com.weibo/motan.svg?label=Maven%20Central)](https://mvnrepository.com/search?q=motan) 
+[![Build Status](https://travis-ci.org/mumudemo/mumu-rocketmq.svg?branch=master)](https://travis-ci.org/mumudemo/mumu-rocketmq)
+[![OpenTracing-1.0 Badge](https://img.shields.io/badge/OpenTracing--1.0-enabled-blue.svg)](http://opentracing.io)
 > &emsp; rocketmq 是由阿里巴巴开源出来的一个分布式消息服务器，rocketmq是在kafka的基础上进行重构，然后开发出来支撑阿里巴巴双十一高并发量的消息服务器。现在阿里巴巴已经将项目托管到apache基金会。  
 > &emsp;相较于ActiveMQ、kafka、RabbitMQ等开源消息服务器，rocketmq增加了许多特性，如：消息事务、消息安序发送、消息快速存储等。如果想要了解更多请访问[Why RocketMQ](https://rocketmq.incubator.apache.org/docs/motivation/)。
 
@@ -46,6 +48,66 @@ public void receiveMessage() {
         }
     }
 ```
+```
+     /**
+     * 发送消息【同步】
+     * @param message
+     * @return
+     */
+    public String sendMessage(String message){
+        DefaultMQProducer producer=new DefaultMQProducer(RocketMQConfiguration.ROCKETMQ_GROUP);
+        producer.setNamesrvAddr(RocketMQConfiguration.ROCKETMQ_NAMESRV);
+        producer.setVipChannelEnabled(false);
+        try {
+            producer.start();
+            for (int i = 0; i < 100; i++) {
+                SendResult sendResult = producer.send(new Message(RocketMQConfiguration.ROCKETMQ_TOPIC, message!=null?message.getBytes():null));
+                System.out.println(sendResult);
+            }
+            return null;
+        } catch (MQClientException|InterruptedException| RemotingException|MQBrokerException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }finally {
+            producer.shutdown();
+        }
+        return null;
+    }
+```
+
+```
+    /** 
+     * 发送消息【异步】
+     * @param message
+     * @return
+     */
+    public String sendAsyncMessage(String message){
+        DefaultMQProducer producer=new DefaultMQProducer(RocketMQConfiguration.ROCKETMQ_GROUP+"123");
+        producer.setNamesrvAddr(RocketMQConfiguration.ROCKETMQ_NAMESRV);
+        producer.setVipChannelEnabled(false);
+        try {
+            producer.start();
+            producer.send(new Message(RocketMQConfiguration.ROCKETMQ_TOPIC, message != null ? message.getBytes() : null), new SendCallback() {
+                @Override
+                public void onSuccess(SendResult sendResult) {
+                    System.out.println("消息发送成功"+sendResult);
+                }
+
+                @Override
+                public void onException(Throwable throwable) {
+                    System.out.println("消息发送失败"+throwable.getLocalizedMessage());
+                }
+            });
+            return null;
+        } catch (MQClientException|InterruptedException| RemotingException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }finally {
+            producer.shutdown();
+        }
+        return null;
+    }
+```
 
 ## rocketmq 主题创建
 >rocketmq主题创建建议通过mqadmin来创建。如果通过程序来创建，可能造成负载均衡失调问题。
@@ -86,3 +148,8 @@ os : docker centos 7
 [芋道源码--rocketmq纯源码解析](http://www.yunai.me/categories/RocketMQ/?jianshu)  
 [ 分布式消息队列RocketMQ源码分析](http://blog.csdn.net/chunlongyu/article/category/6638499)  
 [rocketmq命令整理](http://jameswxx.iteye.com/blog/2091971)
+
+## 联系方式
+**以上观点纯属个人看法，如有不同，欢迎指正。  
+email:<babymm@aliyun.com>  
+github:[https://github.com/babymm](https://github.com/babymm)**
